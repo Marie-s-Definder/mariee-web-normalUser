@@ -1,0 +1,293 @@
+@if ( area ) {
+    <h3 class="head">查看设备</h3>
+    @if( droidOptions.length == 0 ){
+    <div>该区域没有相关机器人信息</div>
+    }@else {
+    @if(droidOptions.length>1){
+    <!-- <nz-segmented [nzOptions]="droidOptions" nzSize="large" (nzValueChange)="onSelectDroid($event);"></nz-segmented> -->
+    <nz-card class = "equipments">
+        <div class="container">
+            <!-- <button nz-button nzType="primary"  (click)="showModal('仪表')">
+                <span>仪表1</span>
+            </button>
+
+            <button nz-button nzType="primary"  (click)="showModal('AHUP6-2配电柜6-2循环机组')">
+                <span>AHUP6-2配电柜6-2循环机组</span>
+            </button> -->
+        </div>
+    </nz-card>
+    }
+    @else if( droidOptions.length==1 )
+    {
+    <h4>{{ droidOptions[0].label }}</h4>
+    }
+    <main>
+      <nz-card [nzExtra]="snapshot">
+        @if( !isLive() ){
+        <div nz-icon [nzType]=" 'loading' "></div>
+        }
+        <div class="holder" #liveHolder></div>
+      </nz-card>
+      <ng-template #snapshot>
+        <div class="jiankong">实时监控</div>
+        <!-- <button nz-button nzType="default" nzShape="round" (click)="onSnapshot();">
+          <span nz-icon nzType="camera" nzTheme="outline"></span>
+          视频截图
+        </button> -->
+        <div class="abutton">
+            <button (click)="onLiveClick();">
+                <span nz-icon nzType="reload" nzTheme="outline"></span>
+                摄像头重连
+            </button>
+        </div>
+      </ng-template>
+      <!-- <nz-card class="droid-ctrl" [nzExtra]="tabelname">
+        <ng-template #tabelname>
+            <div class="biaoge">机器人控制面板</div>
+        </ng-template>
+        <article class="ipc-ctrl">
+
+          <div>
+
+                <div class="A" >
+                    <div class="textA">云台控制 </div>
+                    <div>
+
+                        <button class="robotctrl" (click)="onIpcControl('up')">
+                            上
+                        </button>
+                    </div>
+                    <div>
+
+                        <button class="robotctrl" (click)="onIpcControl('left')">
+                            左
+                        </button>
+                    </div>
+                    <div>
+
+                        <button class="robotctrl" (click)="onIpcControl('right')">
+                            右
+                        </button>
+                    </div>
+                    <div>
+
+                        <button class="robotctrl" (click)="onIpcControl('down')">
+                            下
+                        </button>
+                    </div>
+                </div>
+
+                <div class="B" >
+                    <div class="textB">焦距控制 </div>
+                    <div>
+
+                        <button class="robotctrl" (click)="onIpcFocal('in')">
+                            缩
+                        </button>
+                    </div>
+                    <div>
+
+                        <button class="robotctrl" (click)="onIpcFocal('out')">
+                            放
+                        </button>
+                    </div>
+                </div>
+
+
+                <div class="C" >
+                    <div class="textC"> 滑轨控制 </div>
+                    <div>
+
+                        <button class="robotctrl" (click)="robotLeft()">
+                            左
+                        </button>
+                    </div>
+                    <div>
+
+                        <button class="robotctrl" (click)="robotRight()">
+                            右
+                        </button>
+                    </div>
+                </div>
+
+                <div class="D" >
+                    <div class="textD"> 模式控制 </div>
+                    <div>
+
+                        <button class="robotctrl" (click)="startCheck()">
+                            自动巡检
+                        </button>
+                    </div>
+                    <div>
+
+                        <button class="robotctrl" (click)="stopCheck()">
+                            手动控制
+                        </button>
+                    </div>
+                    <div>
+
+                        <button class="robotctrl" (click)="showPosition()">
+                            预置点列表
+                        </button>
+                    </div>
+                </div>
+
+
+
+          </div>
+        </article>
+      </nz-card> -->
+    </main>
+    }
+    } @else {
+    <div>所选区域不存在</div>
+    }
+
+    <!-- 设备历史状态对话框 -->
+    <nz-modal [(nzVisible)]="isVisible" [nzTitle]='deviceName' (nzOnCancel)="handleCancel()" [nzFooter]=null [nzWidth]='widthnz' [nzBodyStyle]="{ 'overflow': 'auto' }">
+        <ng-container *nzModalContent>
+            <div class="boxxx">
+                <div>
+                    <button nz-button nz-dropdown [nzDropdownMenu]="menu">
+                        {{ buttonText }}
+                        <i nz-icon nzType="down"></i>
+                    </button>
+                    <nz-dropdown-menu #menu="nzDropdownMenu">
+                        <ul nz-menu>
+                        <li nz-menu-item>
+                            <a (click)="doCheck('a')">最近24小时</a>
+                        </li>
+                        </ul>
+                        <ul nz-menu>
+                        <li nz-menu-item>
+                            <a (click)="doCheck('b')">最近一周</a>
+                        </li>
+                        </ul>
+                        <ul nz-menu>
+                            <li nz-menu-item>
+                            <a (click)="doCheck('c')">最近一个月</a>
+                            </li>
+                        </ul>
+                    </nz-dropdown-menu>
+                </div>
+                <div>
+                    <nz-range-picker [nzShowTime]="true" [(ngModel)]="date" (ngModelChange)="onChange($event)"></nz-range-picker>
+                </div>
+                <div>
+                    <button nz-button (click)="returnback()">
+                        清除筛选条件
+                    </button>
+                </div>
+            </div>
+            <nz-table
+            [nzFooter]="null"
+            [nzData]="listOfRandomUser"
+            [nzFrontPagination]="false"
+            [nzShowPagination]="false"
+            [nzShowSizeChanger]="false"
+            [nzLoading]="loading"
+            [nzTotal]="total"
+            [nzSize]="size"
+            [nzPageSize]="pageSize"
+            [nzPageIndex]="pageIndex"
+            >
+            <thead>
+                <tr>
+                <th>数据编号</th>
+                <th>设备名称</th>
+                <th>录入日期</th>
+                <th>数据名称</th>
+                <th>数据结果</th>
+                <th>数据状态</th>
+                <th>数据来源</th>
+                <th>巡检图片</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of listOfRandomUser">
+                <td>{{ data.id }}</td>
+                <td>{{ data.devicename }}</td>
+                <td>{{ data.date | date: 'yyyy-MM-dd HH:mm:ss' }}</td>
+                <td>{{ data.name }}</td>
+                <td>{{ data.result }}</td>
+                <td  [class.status-normal]="data.status === '0'" [class.status-abnormal]="data.status != '0'" >{{ data.status == '0' ? '正常' : '异常'  }}</td>
+                <td>{{ data.getby == 0 ? '机器人' : 'IOT' }}</td>
+                <td>
+                    <button nzType="primary" (click)="showPic(data.imgpath)">{{ data.imgpath ? '有' : '无' }}</button>
+                </td>
+                </tr>
+            </tbody>
+            </nz-table>
+        </ng-container>
+    </nz-modal>
+
+    <!-- 巡检图片对话框 -->
+    <nz-modal [(nzVisible)]="isVisiblepic" nzTitle="巡检图片" (nzOnCancel)="handleCancelpic()" [nzFooter]=null [nzWidth]='widthnz' [nzBodyStyle]="{'overflow': 'auto'}" >
+        <div class="diii">
+            <ng-container *nzModalContent>
+                <div class="pic">
+                    <img id="myImage" [src]="getPath()" [style.max-width.px]="calculateMaxWidth()" [style.max-height.px]="calculateMaxHeight()">
+                </div>
+            </ng-container>
+        </div>
+    </nz-modal>
+
+    <!-- 预置点列表 -->
+    <nz-modal [(nzVisible)]="isVisiblepos" nzTitle="预置点列表" (nzOnCancel)="handlePosition()" [nzFooter]=null [nzWidth]='widthnz' [nzBodyStyle]="{ 'overflow': 'auto' }">
+        <ng-container *nzModalContent>
+            <nz-table
+            [nzFooter]="null"
+            [nzData]="listOfPresets"
+            [nzFrontPagination]="false"
+            [nzShowPagination]="false"
+            [nzShowSizeChanger]="false"
+            [nzLoading]="loading"
+            [nzTotal]="total"
+            [nzSize]="size"
+            [nzPageSize]="pageSize"
+            [nzPageIndex]="pageIndex"
+            >
+            <thead>
+                <tr>
+                    <th>预置点编号</th>
+                    <th>预置点P</th>
+                    <th>预置点T</th>
+                    <th>预置点Z</th>
+                    <th>预置点设备id</th>
+                    <th>所属机器人id</th>
+                    <th>所属滑轨id</th>
+                    <th>预置点所关注id</th>
+                    <th>移动到预置点</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of listOfPresets">
+                <td>{{ data.id }}</td>
+                <td>{{ data.p }}</td>
+                <td>{{ data.t }}</td>
+                <td>{{ data.z }}</td>
+                <td>{{ data.device }}</td>
+                <td>{{ data.robotId }}</td>
+                <td>{{ data.slidePresetId }}</td>
+                <td>{{ data.dataInfoId }}</td>
+                <td>
+                    <button nzType="primary" (click)="gotoApreset(data.id)" >移动至此预置点</button>
+
+                    <!-- export interface Presetslist {
+                        id: number;
+                        p: number;
+                        t: number;
+                        z: number;
+                        device_id: number;
+                        data_info_id: string;
+                    } -->
+                </td>
+                </tr>
+            </tbody>
+            </nz-table>
+        </ng-container>
+    </nz-modal>
+
+
+
+s

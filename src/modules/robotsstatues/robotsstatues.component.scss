@@ -1,0 +1,384 @@
+:host {
+    ::ng-deep video {
+        width: 100%;
+        height: auto;
+        margin: auto;
+        background-color: black;
+        max-height: 60vh;
+    }
+
+    nz-card.equipments {
+        margin-top: 9px;
+        flex: auto;
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: repeat(1, 1fr);
+        grid-column-gap: 32px;
+        grid-row-gap: 0;
+        margin-bottom: 9px;
+        div {
+            &:nth-child(1) {
+                grid-area: 1 / 1 / 2 / 2;
+                text-align: left;
+            }
+            &:nth-child(2) {
+                grid-area: 1 / 2 / 2 / 3;
+                text-align: left;
+            }
+        }
+    }
+    main {
+        display: flex;
+        width: 100%;
+        column-gap: 1rem;
+        height: 83%;
+    }
+
+    .A {
+        display: grid;
+        border: 2px solid black;
+        padding: 10px;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: auto;
+        gap: 10px;
+        position: relative;
+    }
+
+    .textA {
+        position: relative; /* 修改为相对定位 */
+        top: -15px; /* 调整文本的位置 */
+        left: -15px; /* 调整文本的位置 */
+        background-color: white;
+        padding: 5px;
+        font-weight: bold;
+        z-index: 1; /* 确保文本在顶层 */
+    }
+    .B {
+        display: grid;
+        border: 2px solid black;
+        padding: 10px;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: auto;
+        gap: 10px;
+        position: relative;
+    }
+    .textB {
+        position: relative; /* 修改为相对定位 */
+        top: -15px; /* 调整文本的位置 */
+        left: -15px; /* 调整文本的位置 */
+        background-color: white;
+        padding: 5px;
+        font-weight: bold;
+        z-index: 1; /* 确保文本在顶层 */
+    }
+
+    .C {
+        display: grid;
+        border: 2px solid black;
+        padding: 10px;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: auto;
+        gap: 10px;
+        position: relative;
+    }
+    .textC {
+        position: relative; /* 修改为相对定位 */
+        top: -15px; /* 调整文本的位置 */
+        left: -15px; /* 调整文本的位置 */
+        background-color: white;
+        padding: 5px;
+        font-weight: bold;
+        z-index: 1; /* 确保文本在顶层 */
+    }
+
+    .D {
+        display: grid;
+        border: 2px solid black;
+        padding: 10px;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: auto;
+        gap: 10px;
+        position: relative;
+    }
+    .textD {
+        position: relative; /* 修改为相对定位 */
+        top: -15px; /* 调整文本的位置 */
+        left: -15px; /* 调整文本的位置 */
+        background-color: white;
+        padding: 5px;
+        font-weight: bold;
+        z-index: 1; /* 确保文本在顶层 */
+    }
+
+    nz-card {
+        margin-top: 9px;
+        flex: auto;
+        overflow: hidden;
+        div[nz-icon] {
+            width: 100%;
+            font-size: 5rem;
+            text-align: center;
+            color: #ffffff;
+            cursor: pointer;
+        }
+        &.droid-ctrl {
+            flex: 0 1 30rem;
+            article.ipc-ctrl {
+                width: 120%;
+                >nav {
+                    margin-bottom: 9px;
+                }
+                >div {
+                    display: grid;
+                    grid-template-columns: repeat(6, 1fr);
+                    grid-template-rows: repeat(4, 1fr);
+                    grid-column-gap: 32px;
+                    grid-row-gap: 18px;
+                    margin-bottom: 9px;
+                    div {
+
+                        &:nth-child(1) {
+                            grid-area: 1 / 1 / 2 / 6;
+                            text-align: center;
+                            display: flex;
+                            grid-template-columns: repeat(3, 1fr);
+                            grid-template-rows: repeat(3, 1fr);
+                            > *:nth-child(1) {
+                                /* 第一个子元素的样式 */
+                                grid-column: 2;
+                                grid-row: 1;
+                            }
+
+                            > *:nth-child(2) {
+                                /* 第二个子元素的样式 */
+                                grid-column: 1;
+                                grid-row: 2;
+                            }
+
+                            > *:nth-child(3) {
+                                /* 第三个子元素的样式 */
+                                grid-column: 3;
+                                grid-row: 2;
+                            }
+
+                            > *:nth-child(4) {
+                                /* 第四个子元素的样式 */
+                                grid-column: 2;
+                                grid-row: 2;
+                            }
+                        }
+                        &:nth-child(2) {
+                            grid-area: 2 / 1 / 3 / 6;
+                            text-align: center;
+                            display: flex;
+                            grid-template-columns: repeat(3, 1fr);
+                            grid-template-rows: repeat(1, 1fr);
+                            > *:nth-child(1) {
+                                /* 第一个子元素的样式 */
+                                grid-column: 1;
+                                grid-row: 1;
+                            }
+
+                            > *:nth-child(2) {
+                                /* 第二个子元素的样式 */
+                                grid-column: 3;
+                                grid-row: 1;
+                            }
+                        }
+                        &:nth-child(3) {
+                            grid-area: 3 / 1 / 4 / 6;
+                            text-align: center;
+                            display: flex;
+                            grid-template-columns: repeat(3, 1fr);
+                            grid-template-rows: repeat(1, 1fr);
+                            > *:nth-child(1) {
+                                /* 第一个子元素的样式 */
+                                grid-column: 1;
+                                grid-row: 1;
+                            }
+
+                            > *:nth-child(2) {
+                                /* 第二个子元素的样式 */
+                                grid-column: 3;
+                                grid-row: 1;
+                            }
+                        }
+                        &:nth-child(4) {
+                            grid-area: 4 / 1 / 5 / 6;
+                            text-align: center;
+                            display: flex;
+                            grid-template-columns: repeat(3, 1fr);
+                            grid-template-rows: repeat(1, 1fr);
+                            > *:nth-child(1) {
+                                /* 第一个子元素的样式 */
+                                grid-column: 1;
+                                grid-row: 1;
+                            }
+
+                            > *:nth-child(2) {
+                                /* 第二个子元素的样式 */
+                                grid-column: 1;
+                                grid-row: 2;
+                            }
+
+                            > *:nth-child(3) {
+                                /* 第二个子元素的样式 */
+                                grid-column: 1;
+                                grid-row: 3;
+                            }
+                        }
+                        // &:nth-child(2) {
+                        //     grid-area: 3 / 1 / 4 / 2;
+                        //     text-align: right;
+                        // }
+                        // &:nth-child(3) {
+                        //     grid-area: 3 / 3 / 4 / 4;
+                        //     text-align: left;
+                        // }
+                        // &:nth-child(4) {
+                        //     grid-area: 4 / 2 / 5 / 3;
+                        //     text-align: center;
+                        // }
+
+                        // &:nth-child(5) {
+                        //     grid-area: 5 / 1 / 6 / 2;
+                        //     text-align: center;
+                        // }
+                        // &:nth-child(6) {
+                        //     grid-area: 5 / 3 / 6 / 4;
+                        //     text-align: center;
+                        // }
+                        // &:nth-child(7) {
+                        //     display: flex;
+                        //     grid-area: 6 / 1 / 7 / 3;
+                        //     text-align: center;
+                        // }
+                        // &:nth-child(8) {
+                        //     display: flex;
+                        //     grid-area: 6 / 3 / 7 / 5;
+                        //     text-align: center;
+                        // }
+                        // &:nth-child(9) {
+                        //     display: flex;
+                        //     // justify-content: center; /* 水平居中 */
+                        //     // align-items: center; /* 垂直居中 */
+                        //     grid-area: 7 / 1 / 8 / 5;
+                        //     text-align: center;
+                        // }
+                        // &:nth-child(10) {
+                        //     display: flex;
+                        //     // justify-content: center; /* 水平居中 */
+                        //     // align-items: center; /* 垂直居中 */
+                        //     grid-area: 1 / 1 / 2 / 2;
+                        //     text-align: center;
+                        // }
+                        // &:nth-child(11) {
+                        //     display: flex;
+                        //     // justify-content: center; /* 水平居中 */
+                        //     // align-items: center; /* 垂直居中 */
+                        //     grid-area: 1 / 3 / 2 / 4;
+                        //     text-align: center;
+                        // }
+                    }
+                }
+            }
+        }
+    }
+}
+
+nz-modal {
+    /* 对带有 [nz-icon] 属性的 <div> 元素应用样式 */
+    display: scroll;
+    width: auto;
+    padding: 9px;
+}
+
+nz-range-picker {
+    margin: 0 8px 12px 0;
+}
+
+.jiankong {
+    position: absolute;
+    top: 0.8%;
+    left: 2%;
+    display: flex;
+    margin-left: auto;
+    font-size: 20px;
+    font-weight: bold;
+    color: #000000;
+}
+
+.abutton {
+    position: absolute;
+    text-align: center;
+    justify-content: center; /* 水平居中 */
+    align-items: center; /* 垂直居中 */
+    top: 0.8%;
+    right: 0.5%;
+    display: flex;
+    font-size: 20px;
+    font-weight: bold;
+    color: #000000;
+}
+
+.container {
+    display: flex;
+    // flex-direction: row;
+    white-space: nowrap;
+    gap: 10px;
+    padding: 9px;
+}
+
+.button-red {
+    background-color: red;
+    color: rgb(0, 0, 0);
+}
+
+.button-green {
+    background-color: rgb(96, 241, 96);
+    color: rgb(0, 0, 0);
+}
+
+.pic img {
+    max-width: 200px; /* 设置最大宽度 */
+    max-height: 200px; /* 设置最大高度 */
+}
+
+* {
+    font-size: 18px;
+}
+
+.boxxx {
+    display: flex;
+    gap: 10px;
+}
+.diii {
+    justify-content: center;
+}
+
+.status-abnormal {
+    color: red; /* 红色文本 */
+}
+
+.status-normal {
+    color: inherit; /* 正常颜色，可以是默认的颜色 */
+}
+
+.head {
+    font-size: 27px;
+}
+
+.biaoge {
+    position: absolute;
+    top: 1%;
+    left: 7%
+}
+
+::ng-deep .ant-table-thead > tr > th {
+    background-color: #cccccc; /* 设置表头背景色为灰色 */
+    color: #333333; /* 设置表头文字颜色为深灰色 */
+}
+::ng-deep .ant-table-tbody > tr:nth-child(odd) {
+    background-color: #f7f7f7; /* 设置奇数行背景色为浅灰色 */
+}
