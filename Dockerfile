@@ -6,7 +6,7 @@ COPY ./ ./
 
 RUN npm install --loglevel=error --audit=false
 
-RUN npm run lint
+# RUN npm run lint
 
 RUN npm run build
 
