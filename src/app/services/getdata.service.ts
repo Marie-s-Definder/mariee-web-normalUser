@@ -22,6 +22,22 @@ export interface RandomUser {
     imgpath: string;
 }
 
+export interface NowUser {
+    id: number;
+    devicename: string;
+    detecTime: string;
+    one: string;
+    two: string;
+    three: string;
+    four: string;
+    five: string;
+    six: string;
+    seven: string;
+    status: string;
+    getby: number;
+    imgpath: string;
+}
+
 export interface Presetslist {
     id: number;
     p: number;

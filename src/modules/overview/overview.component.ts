@@ -88,7 +88,8 @@ export class OverviewComponent implements OnInit {
 
     @Input()
     private set areaId(value: string) {
-        this.value = value;
+        value = '007011';
+        this.value =  value;
         if (!value) { return; }
         this.disposeLive();
         this.area = this.areaService.getById(value) ?? undefined;
@@ -101,6 +102,9 @@ export class OverviewComponent implements OnInit {
             this.droidOptions = new Array<NzSegmentedOption>();
         }
         void this.onLiveClick();
+
+        // 恢复时需要对此进行修改
+        this.change2handelmode(1);
     }
 
     // 对于buildingname和roomname首先传进来是007011，我需要分割为007和011，然后roomname直接就是area.name，然后看007，想办法去掉前面的0得到7然后找到areaservice里面id为7对应的name

@@ -13,7 +13,7 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzTableModule, NzTableSize } from 'ng-zorro-antd/table';
-import { GetDataService, RandomUser, RobotGet, Presetslist } from '../../app/services/getdata.service';
+import { GetDataService, RandomUser, NowUser, RobotGet, Presetslist } from '../../app/services/getdata.service';
 import { HkIpcService } from '../../app/services/hkipc.service';
 import { InteractionService } from '../../app/services/interaction.service';
 import { environment } from '../../environments/environment';
@@ -60,6 +60,10 @@ export class RobotsstatuesComponent {
 
     public listOfRandomUser: Array<RandomUser> = [];
 
+    public tempUser: Array<RandomUser> = [];
+
+    public userNowLi: Array<NowUser> = [];
+
     public listOfrobotGet: Array<RobotGet> = [];
 
     public listOfPresets: Array<Presetslist> = [];
@@ -73,6 +77,8 @@ export class RobotsstatuesComponent {
     public size: NzTableSize = 'small';
 
     public date: null = null;
+
+    public detecTime: null = null;
 
     public robotId: number = 1;
 
@@ -97,6 +103,10 @@ export class RobotsstatuesComponent {
     public imageHeight: string = '100%';
 
     public isVisiblepos?: boolean = false;
+
+    public modeNow: string = '';
+
+    public presetNow: string = '';
 
     private liveVideoNode?: HTMLVideoElement;
 
@@ -175,9 +185,20 @@ export class RobotsstatuesComponent {
         this.randomUserService.getButtoneed(this.robotId).subscribe(data => {
             this.loading = false;
             this.total = 200;
-            data.data.forEach(innerData => {
-                this.createButton(innerData.name, innerData.status);
-            });
+            // const sortedStrings = data.data.sort((a, b) => {
+            //     const numA = parseInt(a.replace(/\D/g, ''), 10);
+            //     const numB = parseInt(b.replace(/\D/g, ''), 10);
+            //     return numA - numB;
+            // });
+            // console.log(data.data);
+            // data.data.forEach(innerData => {
+            //     console.log(innerData.name);
+            //     this.createButton(innerData.name, innerData.status);
+            // });
+            this.createButton(data.data[3].name, data.data[3].status);
+            this.createButton(data.data[1].name, data.data[1].status);
+            this.createButton(data.data[2].name, data.data[2].status);
+            this.createButton(data.data[0].name, data.data[0].status);
         });
     }
 
@@ -291,8 +312,93 @@ export class RobotsstatuesComponent {
         this.randomUserService.getUsers(robotId, deviceName, startendTime).subscribe(data => {
             this.loading = false;
             this.total = 200;
-            this.listOfRandomUser = data.data;
+            // console.log(data.data)
+            var temp = this.converterDate(data.data[0].date);
+
+            // var ind = 1;
+            // var temp = data[0].date;
+            for (const user of data.data.slice(1)) {
+                // this.tempUser.push(user);
+                var thistime = this.converterDate(user.date)
+
+                if (thistime-temp < 10 && thistime-temp > -10){
+                    this.tempUser.push(user); // 推入数组
+                } else {
+                    // console.log(this.tempUser)
+                    // break;
+                    this.userNowLi.push(this.all2Now( this.tempUser))
+                    this.tempUser.length = 0;
+                    this.tempUser.push(user);
+                    // ind++;
+                }
+                temp = thistime;
+            }
+
+            // this.listOfRandomUser = data.data;
         });
+    }
+    public all2Now( li:Array<RandomUser>): NowUser{
+        const userr: NowUser = { //创建一个以后填
+            id: li[0].id,
+            devicename: li[0].devicename,
+            detecTime: this.convD(li[0].date),
+            one: '',
+            two: '',
+            three: '',
+            four: '',
+            five: '',
+            six: '',
+            seven: '',
+            status: '',
+            getby: 0,
+            imgpath: li[0].imgpath
+        };
+        userr.status = '0';
+        for (const item of li){
+            if(item.status == '1'){
+                userr.status = '1';
+            }
+            if (item.name.includes("排风机运行指示")){
+                userr.one = item.status;
+            } else if(item.name.includes("排风机故障指示")) {
+                userr.two = item.status;
+            } else if(item.name.includes("风机停止指示")) {
+                userr.three = item.status;
+            } else if(item.name.includes("风机运行指示")) {
+                userr.four = item.status;
+            } else if(item.name.includes("风机防火阀动作指示")) {
+                userr.five = item.status;
+            } else if(item.name.includes("风机变频器故障指示")) {
+                userr.six = item.status;
+            } else if(item.name.includes("旋钮")) {
+                userr.seven = item.status;
+            }
+        }
+        return userr;
+    }
+    public converterDate( stringDate:string ): number{
+        // const timeString = '2024-05-21T04:43:33.000+00:00';
+        const date = new Date(stringDate);
+
+        // 使用 getTime() 方法将日期转换为毫秒数，然后除以 1000 得到秒数
+        const seconds = date.getTime() / 1000;
+
+        // console.log(seconds);
+        return seconds;
+
+    }
+
+    public convD (stringD:string):string{
+        const date = new Date('2024-05-21T06:06:25.000+00:00');
+
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     }
 
     // 获取预置点
@@ -401,6 +507,14 @@ export class RobotsstatuesComponent {
         if (droid?.ipcId) {
             await this.ipcService.startTimer(droid.ipcId);
         }
+
+        var elements = document.querySelectorAll("[id='dddd']");
+        elements.forEach(function(element) {
+            if (element instanceof HTMLElement) {
+                element.style.display = "none";
+            }
+        });
+
     }
 
     public async stopCheck(): Promise<void> {
@@ -409,6 +523,12 @@ export class RobotsstatuesComponent {
         if (droid?.ipcId) {
             await this.ipcService.stopTimer(droid.ipcId);
         }
+        var elements = document.querySelectorAll("[id='dddd']");
+        elements.forEach(function(element) {
+            if (element instanceof HTMLElement) {
+                element.style.display = "block";
+            }
+        });
     }
 
     public async onSnapshot(): Promise<void> {

@@ -191,7 +191,7 @@
             [nzPageSize]="pageSize"
             [nzPageIndex]="pageIndex"
             >
-            <thead>
+            <!-- <thead>
                 <tr>
                 <th>数据编号</th>
                 <th>设备名称</th>
@@ -204,7 +204,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let data of listOfRandomUser">
+                <tr *ngFor="let data of listOfRandomUser">userNowLi
                 <td>{{ data.id }}</td>
                 <td>{{ data.devicename }}</td>
                 <td>{{ data.date | date: 'yyyy-MM-dd HH:mm:ss' }}</td>
@@ -212,6 +212,43 @@
                 <td>{{ data.result }}</td>
                 <td  [class.status-normal]="data.status === '0'" [class.status-abnormal]="data.status != '0'" >{{ data.status == '0' ? '正常' : '异常'  }}</td>
                 <td>{{ data.getby == 0 ? '机器人' : 'IOT' }}</td>
+                <td>
+                    <button nzType="primary" (click)="showPic(data.imgpath)">{{ data.imgpath ? '有' : '无' }}</button>
+                </td>
+                </tr>
+            </tbody> -->
+            <thead>
+                <tr>
+                <th>数据编号</th>
+                <!-- <th>设备名称</th> -->
+                <th>巡检时间</th>
+                <th>排风机运行状态</th>
+                <th>送风机停止状态</th>
+                <th>送风机运行状态</th>
+                <th>排风机故障状态</th>
+                <th>防火阀动作状态</th>
+                <th>送风机故障状态</th>
+                <th>手自动状态</th>
+                <th>数据来源</th>
+                <th>数据状态</th>
+                <th>巡检图片</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of userNowLi">
+                <td>{{ data.id }}</td>
+                <!-- <td>{{ data.devicename }}</td> -->
+                <td>{{ data.detecTime}}</td>
+                <td>{{ data.one == "0" ? '正常' : '故障' }}</td>
+                <td>{{ data.two == "0" ? '正常' : '动作' }}</td>
+                <td>{{ data.three == "0" ? '正常' : '故障'  }}</td>
+                <td>{{ data.four == "0" ? '运行' : '停止'  }}</td>
+                <td>{{ data.five == "0" ? '运行' : '停止'  }}</td>
+                <td>{{ data.six == "0" ? '运行' : '停止'  }}</td>
+                <td>{{ data.seven == "0" ? '自动' : '手动'  }}</td>
+                <!-- <td>{{ data.status }}</td> -->
+                <td>{{ data.getby == 0 ? '机器人' : 'IOT' }}</td>
+                <td  [class.status-normal]="data.status === '0'" [class.status-abnormal]="data.status != '0'" >{{ data.status == '0' ? '正常' : '异常'  }}</td>
                 <td>
                     <button nzType="primary" (click)="showPic(data.imgpath)">{{ data.imgpath ? '有' : '无' }}</button>
                 </td>

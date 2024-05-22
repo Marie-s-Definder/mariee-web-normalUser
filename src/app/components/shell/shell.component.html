@@ -1,5 +1,5 @@
 <nz-layout>
-    <nz-header>
+    <!-- <nz-header>
       <div class="title">
           <img class="logo" src="./assets/icon.png" alt="LOGO">
           <article routerLink="/">医院轨道机器人巡检系统</article>
@@ -8,11 +8,11 @@
       <div class="menus">
           <button nz-button [nzGhost]="true"><i nz-icon nzType="user"></i>User1</button>
           <button nz-button [nzGhost]="true"><i nz-icon nzType="export" nzTheme="outline"></i>注销</button>
-          <!-- <button nz-button [nzGhost]="true"><i nz-icon nzType="fullscreen" nzTheme="outline"></i>全屏</button> -->
+          <button nz-button [nzGhost]="true"><i nz-icon nzType="fullscreen" nzTheme="outline"></i>全屏</button>
       </div>
-    </nz-header>
+    </nz-header> -->
     <nz-layout>
-      <nz-sider nzWidth="200px" nzTheme="dark" >
+      <!-- <nz-sider nzWidth="200px" nzTheme="dark" >
         <ul nz-menu nzMode="inline" class="sider-menu">
           @for (area of areas; track area.id;) {
           <li class="out" nz-submenu [nzTitle]="area.name" [nzOpen]="area.selected" [nzIcon]="area.icon || 'insert-row-left'">
@@ -29,7 +29,7 @@
           </li>
           }
         </ul>
-      </nz-sider>
+      </nz-sider> -->
       <nz-layout class="inner">
         <nz-content>
           <router-outlet />
