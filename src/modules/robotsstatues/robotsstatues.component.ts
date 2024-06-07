@@ -92,7 +92,11 @@ export class RobotsstatuesComponent {
 
     public picpath: string = '';
 
-    public widthnz: string = '60%';
+    public widthnz: string = '80%';
+
+    public picwidthnz: string = '55%';
+
+    public yuzhiwidthnz: string = '50%';
 
     public picwidth: string = 'auto';
 
@@ -107,6 +111,8 @@ export class RobotsstatuesComponent {
     public modeNow: string = '';
 
     public presetNow: string = '';
+
+    public timeSetNow: string = '';
 
     private liveVideoNode?: HTMLVideoElement;
 
@@ -134,13 +140,144 @@ export class RobotsstatuesComponent {
             this.droidOptions = this.droids.map<NzSegmentedOption>(i => ({ label: i.name, value: i.id, icon: 'video-camera' }));
             this.robotId = Number(value[1]);
             this.getDevice();
+
+            this.changeColor();
+            this.freashSomestatus();
             setInterval(() => {
                 this.changeColor();
             }, 10000);
+            setInterval(() => {
+                // console.log("已发送")
+                this.freashSomestatus();
+                //下面两个函数封到一起
+                this.Mengban();
+
+            }, 3000);
         } else {
             this.droidOptions = new Array<NzSegmentedOption>();
         }
         void this.onLiveClick();
+    }
+
+    public async setIntervalTime():Promise<void>{
+        const intervalTime = (document.getElementById("text-input") as HTMLInputElement);
+
+        // console.log(intervalTime.value);
+
+        if(Number(intervalTime.value) > 1 || Number(intervalTime.value) < 1441)
+            this.randomUserService.setIntervalNow(this.robotId, intervalTime.value).subscribe(data => {
+                console.log(data.data);
+            });
+        else{
+            await this.interaction.toast('请输入1-1440的数字, 即1分钟到24小时!', { type: 'error' });
+        }
+        this.freashSomestatus();
+
+
+    }
+    public Mengban(){
+        // const list = [];
+        this.randomUserService.getRealTime(this.robotId).subscribe(data => {
+            // if(Array.isArray(data.data)){
+            // console.log(data.data)
+            if(data!=null){
+                this.title(data.data[0],data.data[data.data.length-1])
+                this.freshMengban(data.data.slice(1),data.data[data.data.length-1]);
+            }
+            // }
+        });
+    }
+    public freshMengban(lis:Array<String>, ISON:String):void{
+        // 首先接收一下文字
+
+        var textElement = document.getElementById("mengban1");
+        if (textElement) {
+            // JavaScript 中的变量，可以是任何你想要的值
+            if (ISON=='ON'){
+                var text =
+                '送风机运行状态：'+ lis[0] + '\n' +
+                '送风机报警状态：\t\t'+ lis[1] + '\n' +
+                '排风机运行状态：\t\t'+ lis[2] + '\n' +
+                '排风机报警状态：\t\t'+ lis[3] + '\n' +
+                '浸水状态：\t\t'+ lis[4] + '\n' +
+                '回风温度：\t\t'+ lis[5] + '\n' +
+                '回风湿度：\t\t'+ lis[6] + '\n' +
+                '送风温度：\t\t'+ lis[7] + '\n' +
+                '送风压力：\t\t'+ lis[8] + '\n' +
+                '烟雾浓度：\t\t'+ lis[9] ;
+            }else{
+                var text = '';
+            }
+            // 将文本元素的内容设置为 JavaScript 变量的值
+            textElement.innerText = text;
+        } else {
+            console.error("无法找到指定的文本元素！");
+        }
+    }
+    public title(tex: String, ISON:String):void{
+        // 首先接收一下文字
+
+        var textElement = document.getElementById("mengban0");
+        if (textElement) {
+            if (ISON=='ON'){
+                // JavaScript 中的变量，可以是任何你想要的值
+                var text =
+                '当前巡检位置：'+ tex + '\n\n';
+            }else{
+                var text = '';
+            }
+
+            // 将文本元素的内容设置为 JavaScript 变量的值
+            textElement.innerText = text;
+        } else {
+            console.error("无法找到指定的文本元素！");
+        }
+    }
+
+    public freashSomestatus(){
+        this.randomUserService.getIntervalNow(this.robotId).subscribe(data => {
+            const match = data.data.match(/(\d+) minutes/)
+            // 巡检间隔
+            if (match) {
+                const minutes = match[1];
+                this.timeSetNow = minutes+'分钟';
+            } else {
+                this.timeSetNow = '';
+            }
+            // 模式
+            const match2 = data.data.match(/not found service for robot/)// 说明没有服务
+            if (match2) {
+                this.modeNow = ' 手动控制';
+            } else {
+                this.modeNow = ' 自动巡检';//隐藏一下
+                // 隐藏标签
+                var elements = document.querySelectorAll("[id='dddd']");
+                elements.forEach(function(element) {
+                    if (element instanceof HTMLElement) {
+                        element.style.display = "none";
+                    }
+        });
+            }
+        });
+        this.randomUserService.getPresetNow(this.robotId).subscribe(data => {
+            // 预置点
+            const match3 = data.data.match(/\d+/)// 说明没有服务
+            if (match3) {
+                this.presetNow = match3.toString();
+            } else {
+                this.presetNow = '';
+            }
+        });
+    }
+
+    public changeColor(): void {
+        this.randomUserService.getButtoneed(this.robotId).subscribe(data => {
+            this.loading = false;
+            this.total = 200;
+            data.data.forEach(innerData => {
+                this.changeButtonColor(innerData.name, innerData.status);
+            });
+        });
     }
 
     public showModal(deviceName: string): void {
@@ -190,28 +327,37 @@ export class RobotsstatuesComponent {
             //     const numB = parseInt(b.replace(/\D/g, ''), 10);
             //     return numA - numB;
             // });
-            // console.log(data.data);
+            // -\d+
             // data.data.forEach(innerData => {
-            //     console.log(innerData.name);
+            //     // console.log(innerData.name);
             //     this.createButton(innerData.name, innerData.status);
             // });
-            this.createButton(data.data[3].name, data.data[3].status);
-            this.createButton(data.data[1].name, data.data[1].status);
-            this.createButton(data.data[2].name, data.data[2].status);
-            this.createButton(data.data[0].name, data.data[0].status);
+            data.data.sort((a, b) => {
+                const matchA = a.name.match(/-\d+/);
+                var numbera = null;
+                if (matchA) {
+                    numbera = parseInt(matchA[0]);
+                }
+                const matchB = b.name.match(/-\d+/);
+                var numberb = null;
+                if (matchB) {
+                    numberb = parseInt(matchB[0]);
+                }
+                if (numbera!=null && numberb!=null){
+                    return numberb-numbera;
+                }else{
+                    return 0;
+                }
+            });
+            data.data.forEach(innerData => {
+                    // console.log(innerData.name);
+                    this.createButton(innerData.name, innerData.status);
+            });
+
         });
     }
 
-    public changeColor(): void {
-        this.loading = true;
-        this.randomUserService.getButtoneed(this.robotId).subscribe(data => {
-            this.loading = false;
-            this.total = 200;
-            data.data.forEach(innerData => {
-                this.changeButtonColor(innerData.name, innerData.status);
-            });
-        });
-    }
+
 
     public changeButtonColor(buttonname: string, status: number): void {
         const buttons: NodeListOf<Element> = document.querySelectorAll('.device');
@@ -266,6 +412,7 @@ export class RobotsstatuesComponent {
         chineseSpan.style.margin = '0 0 0 0 px';
         chineseSpan.style.padding = '0 px';
         chineseSpan.textContent = `${stat}`;
+
         button.style.padding = '0';
         button.style.paddingLeft = '5px';
         button.style.cursor = 'pointer';
@@ -313,92 +460,36 @@ export class RobotsstatuesComponent {
             this.loading = false;
             this.total = 200;
             // console.log(data.data)
-            var temp = this.converterDate(data.data[0].date);
+            // // for(const a : data.data)
+            // data.data.forEach(function(element) {
+            // if(element.status == '1'){
+            //     console.log(element);
+            // }
+
+            // });
+            // var temp = this.converterDate(data.data[0].date);
 
             // var ind = 1;
             // var temp = data[0].date;
-            for (const user of data.data.slice(1)) {
-                // this.tempUser.push(user);
-                var thistime = this.converterDate(user.date)
+            // for (const user of data.data.slice(1)) {
+            //     // this.tempUser.push(user);
+            //     var thistime = this.converterDate(user.date)
 
-                if (thistime-temp < 10 && thistime-temp > -10){
-                    this.tempUser.push(user); // 推入数组
-                } else {
-                    // console.log(this.tempUser)
-                    // break;
-                    this.userNowLi.push(this.all2Now( this.tempUser))
-                    this.tempUser.length = 0;
-                    this.tempUser.push(user);
-                    // ind++;
-                }
-                temp = thistime;
-            }
+            //     if (thistime-temp < 10 && thistime-temp > -10){
+            //         this.tempUser.push(user); // 推入数组
+            //     } else {
+            //         // console.log(this.tempUser)
+            //         // break;
+            //         this.userNowLi.push(this.all2Now( this.tempUser))
+            //         this.tempUser.length = 0;
+            //         this.tempUser.push(user);
+            //         // ind++;
+            //     }
+            //     temp = thistime;
+            // }
 
-            // this.listOfRandomUser = data.data;
+            this.userNowLi = data.data;
         });
-    }
-    public all2Now( li:Array<RandomUser>): NowUser{
-        const userr: NowUser = { //创建一个以后填
-            id: li[0].id,
-            devicename: li[0].devicename,
-            detecTime: this.convD(li[0].date),
-            one: '',
-            two: '',
-            three: '',
-            four: '',
-            five: '',
-            six: '',
-            seven: '',
-            status: '',
-            getby: 0,
-            imgpath: li[0].imgpath
-        };
-        userr.status = '0';
-        for (const item of li){
-            if(item.status == '1'){
-                userr.status = '1';
-            }
-            if (item.name.includes("排风机运行指示")){
-                userr.one = item.status;
-            } else if(item.name.includes("排风机故障指示")) {
-                userr.two = item.status;
-            } else if(item.name.includes("风机停止指示")) {
-                userr.three = item.status;
-            } else if(item.name.includes("风机运行指示")) {
-                userr.four = item.status;
-            } else if(item.name.includes("风机防火阀动作指示")) {
-                userr.five = item.status;
-            } else if(item.name.includes("风机变频器故障指示")) {
-                userr.six = item.status;
-            } else if(item.name.includes("旋钮")) {
-                userr.seven = item.status;
-            }
-        }
-        return userr;
-    }
-    public converterDate( stringDate:string ): number{
-        // const timeString = '2024-05-21T04:43:33.000+00:00';
-        const date = new Date(stringDate);
-
-        // 使用 getTime() 方法将日期转换为毫秒数，然后除以 1000 得到秒数
-        const seconds = date.getTime() / 1000;
-
-        // console.log(seconds);
-        return seconds;
-
-    }
-
-    public convD (stringD:string):string{
-        const date = new Date('2024-05-21T06:06:25.000+00:00');
-
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        const hours = String(date.getHours()).padStart(2, '0');
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-        const seconds = String(date.getSeconds()).padStart(2, '0');
-
-        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     }
 
     // 获取预置点
@@ -508,6 +599,7 @@ export class RobotsstatuesComponent {
             await this.ipcService.startTimer(droid.ipcId);
         }
 
+        // 隐藏标签
         var elements = document.querySelectorAll("[id='dddd']");
         elements.forEach(function(element) {
             if (element instanceof HTMLElement) {
