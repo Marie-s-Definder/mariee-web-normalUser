@@ -1,5 +1,5 @@
 # Marie-E Web
-## 该Repository与 mariee-web 区别在于，这个用于管理员用户的界面
+## 该Repository与 mariee-web 区别在于，这个用普通用户界面
 
 > A frontend project using [Angular](https://angular.io) with [AntDesign](https://ng.ant.design)
 
